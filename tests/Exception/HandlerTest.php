@@ -20,7 +20,7 @@ class HandlerTest extends BaseTestCase
 
     public function setUp(): void
     {
-        $this->parentHandler = m::mock('Illuminate\Contracts\Debug\ExceptionHandler');
+        $this->parentHandler = fn () => m::mock('Illuminate\Contracts\Debug\ExceptionHandler');
         $this->exceptionHandler = new Handler($this->parentHandler, [
             'message' => ':message',
             'errors' => ':errors',
