@@ -92,7 +92,7 @@ class Request
     {
         try {
             if ($this->validator->validateRequest($request)) {
-                $this->app->singleton(LaravelExceptionHandler::class, function ($app) {
+                $this->app->bind(LaravelExceptionHandler::class, function ($app) {
                     return $app[ExceptionHandler::class];
                 });
 

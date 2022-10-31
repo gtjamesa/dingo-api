@@ -119,7 +119,7 @@ class DingoServiceProvider extends ServiceProvider
      */
     protected function registerExceptionHandler()
     {
-        $this->app->singleton('api.exception', function ($app) {
+        $this->app->bind('api.exception', function ($app) {
             return new ExceptionHandler($app['Illuminate\Contracts\Debug\ExceptionHandler'], $this->config('errorFormat'), $this->config('debug'));
         });
     }
@@ -131,7 +131,7 @@ class DingoServiceProvider extends ServiceProvider
      */
     public function registerDispatcher()
     {
-        $this->app->singleton('api.dispatcher', function ($app) {
+        $this->app->bind('api.dispatcher', function ($app) {
             $dispatcher = new Dispatcher($app, $app['files'], $app[\Dingo\Api\Routing\Router::class], $app[\Dingo\Api\Auth\Auth::class]);
 
             $dispatcher->setSubtype($this->config('subtype'));
@@ -152,7 +152,7 @@ class DingoServiceProvider extends ServiceProvider
      */
     protected function registerAuth()
     {
-        $this->app->singleton('api.auth', function ($app) {
+        $this->app->bind('api.auth', function ($app) {
             return new Auth($app[\Dingo\Api\Routing\Router::class], $app, $this->config('auth'));
         });
     }
@@ -164,7 +164,7 @@ class DingoServiceProvider extends ServiceProvider
      */
     protected function registerTransformer()
     {
-        $this->app->singleton('api.transformer', function ($app) {
+        $this->app->bind('api.transformer', function ($app) {
             return new TransformerFactory($app, $this->config('transformer'));
         });
     }
@@ -176,7 +176,7 @@ class DingoServiceProvider extends ServiceProvider
      */
     protected function registerDocsCommand()
     {
-        $this->app->singleton(\Dingo\Api\Console\Command\Docs::class, function ($app) {
+        $this->app->bind(\Dingo\Api\Console\Command\Docs::class, function ($app) {
             return new Command\Docs(
                 $app[\Dingo\Api\Routing\Router::class],
                 $app[\Dingo\Blueprint\Blueprint::class],

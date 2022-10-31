@@ -48,7 +48,7 @@ class HttpServiceProvider extends ServiceProvider
      */
     protected function registerRateLimiting()
     {
-        $this->app->singleton('api.limiting', function ($app) {
+        $this->app->bind('api.limiting', function ($app) {
             return new RateLimitHandler($app, $app['cache'], $this->config('throttling'));
         });
     }
@@ -60,19 +60,19 @@ class HttpServiceProvider extends ServiceProvider
      */
     protected function registerHttpValidation()
     {
-        $this->app->singleton('api.http.validator', function ($app) {
+        $this->app->bind('api.http.validator', function ($app) {
             return new RequestValidator($app);
         });
 
-        $this->app->singleton(Domain::class, function ($app) {
+        $this->app->bind(Domain::class, function ($app) {
             return new Validation\Domain($this->config('domain'));
         });
 
-        $this->app->singleton(Prefix::class, function ($app) {
+        $this->app->bind(Prefix::class, function ($app) {
             return new Validation\Prefix($this->config('prefix'));
         });
 
-        $this->app->singleton(Accept::class, function ($app) {
+        $this->app->bind(Accept::class, function ($app) {
             return new Validation\Accept(
                 $this->app[AcceptParser::class],
                 $this->config('strict')
@@ -87,7 +87,7 @@ class HttpServiceProvider extends ServiceProvider
      */
     protected function registerHttpParsers()
     {
-        $this->app->singleton(AcceptParser::class, function ($app) {
+        $this->app->bind(AcceptParser::class, function ($app) {
             return new AcceptParser(
                 $this->config('standardsTree'),
                 $this->config('subtype'),
@@ -104,7 +104,7 @@ class HttpServiceProvider extends ServiceProvider
      */
     protected function registerResponseFactory()
     {
-        $this->app->singleton('api.http.response', function ($app) {
+        $this->app->bind('api.http.response', function ($app) {
             return new ResponseFactory($app[Factory::class]);
         });
     }
@@ -116,7 +116,7 @@ class HttpServiceProvider extends ServiceProvider
      */
     protected function registerMiddleware()
     {
-        $this->app->singleton(Request::class, function ($app) {
+        $this->app->bind(Request::class, function ($app) {
             $middleware = new Middleware\Request(
                 $app,
                 $app[ExceptionHandler::class],
@@ -130,15 +130,15 @@ class HttpServiceProvider extends ServiceProvider
             return $middleware;
         });
 
-        $this->app->singleton(AuthMiddleware::class, function ($app) {
+        $this->app->bind(AuthMiddleware::class, function ($app) {
             return new Middleware\Auth($app[Router::class], $app[Auth::class]);
         });
 
-        $this->app->singleton(RateLimit::class, function ($app) {
+        $this->app->bind(RateLimit::class, function ($app) {
             return new Middleware\RateLimit($app[Router::class], $app[Handler::class]);
         });
 
-        $this->app->singleton(PrepareController::class, function ($app) {
+        $this->app->bind(PrepareController::class, function ($app) {
             return new Middleware\PrepareController($app[Router::class]);
         });
     }

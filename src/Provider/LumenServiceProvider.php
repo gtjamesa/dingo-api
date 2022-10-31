@@ -93,7 +93,7 @@ class LumenServiceProvider extends DingoServiceProvider
     {
         parent::register();
 
-        $this->app->singleton('api.router.adapter', function ($app) {
+        $this->app->bind('api.router.adapter', function ($app) {
             return new LumenAdapter($app, new StdRouteParser, new GcbDataGenerator, $this->getDispatcherResolver());
         });
     }
