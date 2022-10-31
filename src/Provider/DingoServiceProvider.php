@@ -2,6 +2,7 @@
 
 namespace Dingo\Api\Provider;
 
+use Illuminate\Container\Container;
 use RuntimeException;
 use Dingo\Api\Auth\Auth;
 use Dingo\Api\Dispatcher;
@@ -119,8 +120,12 @@ class DingoServiceProvider extends ServiceProvider
      */
     protected function registerExceptionHandler()
     {
-        $this->app->bind('api.exception', function ($app) {
-            return new ExceptionHandler($app['Illuminate\Contracts\Debug\ExceptionHandler'], $this->config('errorFormat'), $this->config('debug'));
+        $this->app->singleton('api.exception', function ($app) {
+            return new ExceptionHandler(
+                fn () => Container::getInstance()['Illuminate\Contracts\Debug\ExceptionHandler'],
+                $this->config('errorFormat'),
+                $this->config('debug')
+            );
         });
     }
 

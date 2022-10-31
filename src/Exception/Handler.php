@@ -2,6 +2,7 @@
 
 namespace Dingo\Api\Exception;
 
+use Closure;
 use Dingo\Api\Http\Request;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -58,15 +59,15 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
     /**
      * Create a new exception handler instance.
      *
-     * @param IlluminateExceptionHandler $parentHandler
+     * @param IlluminateExceptionHandler|Closure $parentHandler
      * @param array                                        $format
      * @param bool                                         $debug
      *
      * @return void
      */
-    public function __construct(IlluminateExceptionHandler $parentHandler, array $format, $debug)
+    public function __construct(Closure $parentHandler, array $format, $debug)
     {
-        $this->parentHandler = $parentHandler;
+        $this->parentHandler = $parentHandler();
         $this->format = $format;
         $this->debug = $debug;
     }
